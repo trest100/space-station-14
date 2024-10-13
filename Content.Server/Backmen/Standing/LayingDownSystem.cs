@@ -11,7 +11,7 @@ public sealed class LayingDownSystem : SharedLayingDownSystem // WD EDIT
 {
     [Dependency] private readonly INetConfigurationManager _cfg = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private readonly SharedRotationVisualsSystem _rotationVisuals = default!;
 
     public override void Initialize()
     {
@@ -20,23 +20,17 @@ public sealed class LayingDownSystem : SharedLayingDownSystem // WD EDIT
         //SubscribeNetworkEvent<CheckAutoGetUpEvent>(OnCheckAutoGetUp);
         SubscribeLocalEvent<LayingDownComponent, StoodEvent>(OnStoodEvent);
         SubscribeLocalEvent<LayingDownComponent, DownedEvent>(OnDownedEvent);
-
-        Subs.CVar(_config, CCVars.CrawlUnderTables, b => _crawlUnderTables = b, true);
-
     }
-
-    private bool _crawlUnderTables = false;
-
     private void OnDownedEvent(Entity<LayingDownComponent> ent, ref DownedEvent args)
     {
         // Raising this event will lower the entity's draw depth to the same as a small mob.
-        if (_crawlUnderTables)
+        if (CrawlUnderTables)
             RaiseNetworkEvent(new DrawDownedEvent(GetNetEntity(ent)), Filter.Pvs(ent));
     }
 
     private void OnStoodEvent(Entity<LayingDownComponent> ent, ref StoodEvent args)
     {
-        if (_crawlUnderTables)
+        if (CrawlUnderTables)
             RaiseNetworkEvent(new DrawUpEvent(GetNetEntity(ent)), Filter.Pvs(ent).RemovePlayerByAttachedEntity(ent));
     }
 
@@ -51,13 +45,11 @@ public sealed class LayingDownSystem : SharedLayingDownSystem // WD EDIT
 
         if (rotation.GetDir() is Direction.SouthEast or Direction.East or Direction.NorthEast or Direction.North)
         {
-            rotationVisualsComp.HorizontalRotation = Angle.FromDegrees(270);
-            Dirty(ent, rotationVisualsComp);
+            _rotationVisuals.SetHorizontalAngle((ent, rotationVisualsComp), Angle.FromDegrees(270));
             return;
         }
 
-        rotationVisualsComp.HorizontalRotation = Angle.FromDegrees(90);
-        Dirty(ent, rotationVisualsComp);
+        _rotationVisuals.ResetHorizontalAngle((ent, rotationVisualsComp));
     }
 
     protected override bool GetAutoGetUp(Entity<LayingDownComponent> ent, ICommonSession session)

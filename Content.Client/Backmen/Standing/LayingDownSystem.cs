@@ -1,3 +1,4 @@
+using Content.Shared.ActionBlocker;
 using Content.Shared.Backmen.CCVar;
 using Content.Shared.Backmen.Standing;
 using Content.Shared.Buckle;
@@ -20,14 +21,15 @@ public sealed class LayingDownSystem : SharedLayingDownSystem
     [Dependency] private readonly SharedBuckleSystem _buckle = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedRotationVisualsSystem _rotationVisuals = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<LayingDownComponent, MoveEvent>(OnMovementInput);
-        SubscribeNetworkEvent<DrawDownedEvent>(OnDowned);
-        SubscribeNetworkEvent<DrawUpEvent>(OnUp);
+        SubscribeAllEvent<DrawDownedEvent>(OnDowned);
+        SubscribeAllEvent<DrawUpEvent>(OnUp);
         SubscribeLocalEvent<LayingDownComponent, StoodEvent>(OnStood);
 
         _cfg.OnValueChanged(CCVars.AutoGetUp, b => _autoGetUp = b, true);
@@ -82,20 +84,10 @@ public sealed class LayingDownSystem : SharedLayingDownSystem
     {
         if (!_timing.IsFirstTimePredicted)
             return;
-
-        if (!_standing.IsDown(uid))
+        if(!_standing.IsDown(uid) || _animation.HasRunningAnimation(uid, "rotate") || _buckle.IsBuckled(uid))
             return;
-
-        if (_buckle.IsBuckled(uid))
-            return;
-
-        if (_animation.HasRunningAnimation(uid, "rotate"))
-            return;
-
         if(TerminatingOrDeleted(uid))
             return;
-
-        var transform = Transform(uid);
 
         if (!TryComp<SpriteComponent>(uid, out var sprite)
             || !TryComp<RotationVisualsComponent>(uid, out var rotationVisuals))
@@ -103,7 +95,7 @@ public sealed class LayingDownSystem : SharedLayingDownSystem
             return;
         }
 
-        ProcessVisuals((uid, transform, sprite, rotationVisuals));
+        ProcessVisuals((uid, Transform(uid), sprite, rotationVisuals));
     }
 
     private void ProcessVisuals(Entity<TransformComponent, SpriteComponent?, RotationVisualsComponent> entity)
@@ -112,15 +104,15 @@ public sealed class LayingDownSystem : SharedLayingDownSystem
 
         if (rotation.GetDir() is Direction.SouthEast or Direction.East or Direction.NorthEast or Direction.North)
         {
-            entity.Comp3.HorizontalRotation = Angle.FromDegrees(270);
+            _rotationVisuals.SetHorizontalAngle((entity.Owner, entity.Comp3), Angle.FromDegrees(270));
             if(entity.Comp2 != null)
                 entity.Comp2.Rotation = Angle.FromDegrees(270);
             return;
         }
 
-        entity.Comp3.HorizontalRotation = Angle.FromDegrees(90);
+        _rotationVisuals.ResetHorizontalAngle((entity.Owner, entity.Comp3));
         if(entity.Comp2 != null)
-            entity.Comp2.Rotation = Angle.FromDegrees(90);
+            entity.Comp2.Rotation = entity.Comp3.DefaultRotation;
     }
 
     public override void AutoGetUp(Entity<LayingDownComponent> ent)

@@ -1,6 +1,4 @@
-﻿using Content.Shared.Backmen.Supermatter;
-using Robust.Shared;
-using Robust.Shared.Configuration;
+﻿using Robust.Shared.Configuration;
 
 namespace Content.Shared.Backmen.CCVar;
 
@@ -50,7 +48,7 @@ public sealed class CCVars
     ///     Enabled Discord linking, show linking button and modal window
     /// </summary>
     public static readonly CVarDef<bool> DiscordAuthEnabled =
-        CVarDef.Create("discord_auth.enabled", false, CVar.SERVERONLY);
+        CVarDef.Create("discord_auth.enabled", false, CVar.SERVER | CVar.REPLICATED);
 
     /// <summary>
     ///     URL of the Discord auth server API
@@ -63,6 +61,9 @@ public sealed class CCVars
     /// </summary>
     public static readonly CVarDef<string> DiscordAuthApiKey =
         CVarDef.Create("discord_auth.api_key", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    public static readonly CVarDef<bool> DiscordAuthIsOptional =
+        CVarDef.Create("discord_auth.is_opt", false, CVar.SERVER | CVar.REPLICATED);
 
     /**
      * Sponsors
@@ -195,6 +196,9 @@ public sealed class CCVars
 
     public static readonly CVarDef<bool> OfferModeIndicatorsPointShow =
         CVarDef.Create("hud.offer_mode_indicators_point_show", true, CVar.ARCHIVE | CVar.CLIENTONLY);
+
+    public static readonly CVarDef<bool> HoldLookUp =
+        CVarDef.Create("white.hold_look_up", false, CVar.CLIENT | CVar.ARCHIVE);
 
     #region Supermatter System
 
