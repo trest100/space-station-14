@@ -6,9 +6,12 @@ using Content.Server.Popups;
 using Content.Server.Stack;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Audio;
+using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
+using Content.Shared.Targeting;
+using Content.Shared.Body.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -21,6 +24,8 @@ using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
+using System.Linq;
+using Content.Shared.Body.Part;
 
 namespace Content.Server.Medical;
 
@@ -36,6 +41,7 @@ public sealed class HealingSystem : EntitySystem
     [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private readonly SharedBodySystem _bodySystem = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
 
     public override void Initialize()
@@ -101,6 +107,24 @@ public sealed class HealingSystem : EntitySystem
             QueueDel(args.Used.Value);
         }
 
+        // start-backmen: surgery
+        // This is still pretty shitcodey, but a lot better than previous iteration.
+        // We are just trying to heal the most damaged body part.
+        if (healed != null && healed.GetTotal() == 0)
+        {
+            var parts = _bodySystem.GetBodyChildren(args.Target).ToList();
+            // Get the severest body part, selected by taking the one with lowest Integrity.
+            var severestPart = parts.MinBy(x => x.Component.Integrity);
+            // Convert this thing into a target
+            var targetBodyPart = _bodySystem.GetTargetBodyPart(severestPart);
+
+            if (targetBodyPart != null)
+            {
+                _bodySystem.TryChangeIntegrity(severestPart, healing.Damage.GetTotal().Float(), false, targetBodyPart.Value, out _);
+            }
+        }
+        // end-backmen: surgery
+
         if (entity.Owner != args.User)
         {
             _adminLogger.Add(LogType.Healed,
@@ -115,7 +139,7 @@ public sealed class HealingSystem : EntitySystem
         _audio.PlayPvs(healing.HealingEndSound, entity.Owner, AudioHelpers.WithVariation(0.125f, _random).WithVolume(1f));
 
         // Logic to determine the whether or not to repeat the healing action
-        args.Repeat = (HasDamage(entity.Comp, healing) && !dontRepeat);
+        args.Repeat = HasDamage(entity.Comp, healing) && !dontRepeat || ArePartsDamaged(entity);
         if (!args.Repeat && !dontRepeat)
             _popupSystem.PopupEntity(Loc.GetString("medical-item-finished-using", ("item", args.Used)), entity.Owner, args.User);
         args.Handled = true;
@@ -133,6 +157,19 @@ public sealed class HealingSystem : EntitySystem
             }
         }
 
+        return false;
+    }
+
+    private bool ArePartsDamaged(EntityUid target)
+    {
+        if (!TryComp<BodyComponent>(target, out var body))
+            return false;
+
+        foreach (var part in _bodySystem.GetBodyChildren(target, body))
+        {
+            if (part.Component.Integrity < BodyPartComponent.MaxIntegrity)
+                return true;
+        }
         return false;
     }
 
@@ -174,6 +211,7 @@ public sealed class HealingSystem : EntitySystem
 
         var anythingToDo =
             HasDamage(targetDamage, component) ||
+            ArePartsDamaged(target) ||
             component.ModifyBloodLevel > 0 // Special case if healing item can restore lost blood...
                 && TryComp<BloodstreamComponent>(target, out var bloodstream)
                 && _solutionContainerSystem.ResolveSolution(target, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var bloodSolution)
