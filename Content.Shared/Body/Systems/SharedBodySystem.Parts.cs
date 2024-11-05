@@ -4,12 +4,12 @@ using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
-using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Movement.Components;
 using Content.Shared.Random;
-using Content.Shared.Targeting.Events;
+using Content.Shared.Backmen.Targeting;
 using Robust.Shared.Containers;
 using Robust.Shared.Utility;
 using System.Diagnostics.CodeAnalysis;
@@ -212,7 +212,6 @@ public partial class SharedBodySystem
     {
         DropPart(partEnt);
     }
-
     private void AddLeg(Entity<BodyPartComponent> legEnt, Entity<BodyComponent?> bodyEnt)
     {
         if (!Resolve(bodyEnt, ref bodyEnt.Comp, logMissing: false))
@@ -609,6 +608,18 @@ public partial class SharedBodySystem
         }
 
         part.ParentSlot = slot;
+
+        // start-backmen: surgery
+        if (TryComp(part.Body, out HumanoidAppearanceComponent? bodyAppearance)
+            && !HasComp<BodyPartAppearanceComponent>(partId))
+        {
+            var appearance = AddComp<BodyPartAppearanceComponent>(partId);
+            appearance.OriginalBody = part.Body;
+            appearance.Color = bodyAppearance.SkinColor;
+            UpdateAppearance(partId, appearance);
+        }
+        // end-backmen: surgery
+
         return Containers.Insert(partId, container);
     }
 
