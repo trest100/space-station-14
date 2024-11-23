@@ -15,6 +15,8 @@ using Content.Shared.Gibbing.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Events;
 using Content.Shared.Inventory;
+using Content.Shared.Rejuvenate;
+using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.Standing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -139,7 +141,7 @@ public partial class SharedBodySystem
 
     private void OnStandAttempt(Entity<BodyComponent> ent, ref StandAttemptEvent args)
     {
-        if (ent.Comp.LegEntities.Count == 0)
+        if (!HasComp<BorgChassisComponent>(ent) && ent.Comp.LegEntities.Count == 0)
             args.Cancel();
     }
 
@@ -394,18 +396,18 @@ public partial class SharedBodySystem
 
             RemovePartChildren((partId, part), bodyEnt);
 
-            _gibbingSystem.TryGibEntityWithRef(partId,
-                partId,
-                GibType.Gib,
-                GibContentsOption.Drop,
-                ref gibs,
-                playAudio: true,
-                launchGibs: true,
-                launchDirection: splatDirection,
-                launchImpulse: GibletLaunchImpulse * splatModifier,
-                launchImpulseVariance: GibletLaunchImpulseVariance,
-                launchCone: splatCone);
+            // We have to iterate though every organ to drop it when part is being destroyed
+            foreach (var organ in GetPartOrgans(partId, part))
+            {
+                _gibbingSystem.TryGibEntityWithRef(bodyEnt, organ.Id, GibType.Drop, GibContentsOption.Skip,
+                    ref gibs, playAudio: false, launchImpulse: GibletLaunchImpulse * splatModifier,
+                    launchImpulseVariance: GibletLaunchImpulseVariance, launchCone: splatCone);
+            }
         }
+
+        _gibbingSystem.TryGibEntityWithRef(partId, partId, GibType.Gib, GibContentsOption.Drop, ref gibs,
+                playAudio: true, launchGibs: true, launchDirection: splatDirection, launchImpulse: GibletLaunchImpulse * splatModifier,
+                launchImpulseVariance: GibletLaunchImpulseVariance, launchCone: splatCone);
 
         if (HasComp<InventoryComponent>(partId))
         {
