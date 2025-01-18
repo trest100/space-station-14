@@ -1,7 +1,7 @@
 using Content.Shared.Damage;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-namespace Content.Shared.Medical.Surgery.Effects.Step;
+namespace Content.Shared.Backmen.Surgery.Effects.Step;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class SurgeryDamageChangeEffectComponent : Component
@@ -10,8 +10,8 @@ public sealed partial class SurgeryDamageChangeEffectComponent : Component
     public DamageSpecifier Damage = default!;
 
     [DataField]
-    public float SleepModifier = 0.5f;
+    public float SleepModifier = 1.5f;
 
     [DataField]
-    public bool IsConsumable = false;
+    public bool IsConsumable;
 }

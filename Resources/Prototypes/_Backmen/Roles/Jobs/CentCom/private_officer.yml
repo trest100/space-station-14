@@ -11,6 +11,7 @@
   weight: 1
   requireAdminNotify: true
   joinNotifyCrew: true
+  discordRequired: true
   requirements:
     - !type:DepartmentTimeRequirement
       department: Security
@@ -78,9 +79,13 @@
   name: Centcom Private Officer PDA
   description: Black with green lines, sign of the walking protection of the bureaucracy.
   components:
+    - type: Appearance
+      appearanceDataInit:
+        enum.PdaVisuals.PdaType:
+          !type:String
+          pda-centcomsec
     - type: Pda
       id: IDCardCentComPrivateOfficer
-      state: pda-centcomsec
       penSlot:
         startingItem: PenCentcom
         whitelist:

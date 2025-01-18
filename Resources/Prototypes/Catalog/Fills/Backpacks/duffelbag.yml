@@ -7,7 +7,7 @@
   - type: StorageFill
     contents:
       - id: Hemostat
-      - id: Saw
+      - id: SawElectric # Shitmed Change
       - id: Drill
       - id: Cautery
       - id: Retractor
@@ -166,7 +166,7 @@
   parent: ClothingBackpackDuffelSyndicateBundle
   id: ClothingBackpackDuffelSyndicatePyjamaBundle
   name: syndicate pyjama duffel bag
-  description: Contains 3 pairs of syndicate pyjamas and 3 plushies for the ultimate sleepover.
+  description: Contains 3 pairs of syndicate pyjamas and 4 plushies for the ultimate sleepover.
   components:
   - type: Storage
     grid:
@@ -206,6 +206,7 @@
   components:
     - type: StorageFill
       contents:
+        - id: ChameleonPDA
         - id: ClothingUniformJumpsuitChameleon
         - id: ClothingOuterChameleon
         - id: ClothingNeckChameleon
