@@ -19,6 +19,7 @@
     - Arsenal
     - Experimental
     - CivilianServices
+    - Mech # ADT
   - type: ApcPowerReceiver
     powerLoad: 200
   - type: ExtensionCableReceiver

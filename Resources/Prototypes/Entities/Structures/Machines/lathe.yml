@@ -317,7 +317,7 @@
     - BorgLimbsStatic
     - BackmenShitmedModulesStatic # backmen
     dynamicPacks:
-    - Robotics
+    # - Robotics  # ADT Commented
     - BorgModules
     - MechParts
     - MechEquipment
