@@ -1,29 +1,79 @@
 - type: entity
   id: PartHarpy
-  parent: BasePart
+  parent: BaseItem
   name: "harpy body part"
   abstract: true
+  components:
+  - type: Damageable
+    damageContainer: OrganicPart # Shitmed Change
+  - type: BodyPart
+  - type: ContainerContainer
+    containers:
+      bodypart: !type:Container
+        ents: []
+  - type: StaticPrice #DynamicPrice
+    price: 100
+  - type: Tag
+    tags:
+      - Trash
+  # Shitmed Change Start
+  - type: Gibbable
+  - type: SurgeryTool
+    startSound:
+      path: /Audio/_Shitmed/Medical/Surgery/organ1.ogg
+    endSound:
+      path: /Audio/_Shitmed/Medical/Surgery/organ2.ogg
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 120
+      behaviors:
+      - !type:GibPartBehavior { }
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Slash
+        damage: 120
+      behaviors:
+      - !type:GibPartBehavior { }
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Heat
+        damage: 200
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawnInContainer: true
+        spawn:
+          Ash:
+            min: 1
+            max: 1
+      - !type:BurnBodyBehavior { }
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MeatLaserImpact
+  # Shitmed Change End
 
 - type: entity
-  id: ChestHarpy
-  name: "harpy chest"
+  id: TorsoHarpy
+  name: "harpy torso"
   parent: PartHarpy
   components:
   - type: Sprite
     netsync: false
     sprite: Backmen/Mobs/Species/Harpy/parts.rsi
-    state: "chest_m"
+    state: "torso_m"
   - type: Icon
     sprite: Backmen/Mobs/Species/Harpy/parts.rsi
-    state: "chest_m"
+    state: "torso_m"
   - type: BodyPart
-    partType: Chest
+    partType: Torso
   # Shitmed Change Start
-    toolName: "a chest"
-    containerName: "chest_slot"
+    toolName: "a torso"
+    containerName: "torso_slot"
   - type: ContainerContainer
     containers:
-      chest_slot: !type:ContainerSlot {}
+      torso_slot: !type:ContainerSlot {}
   - type: Destructible
     thresholds:
     - trigger:
@@ -54,58 +104,6 @@
         sound:
           collection: MeatLaserImpact
   # Shitmed Change End
-
-- type: entity
-  id: GroinHarpy
-  name: "harpy groin"
-  parent: PartHarpy
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: Backmen/Mobs/Species/Harpy/parts.rsi
-    state: "groin_m"
-  - type: Icon
-    sprite: Backmen/Mobs/Species/Harpy/parts.rsi
-    state: "groin_m"
-  - type: BodyPart
-    partType: Groin
-  # Shitmed Change Start
-    toolName: "a groin"
-    containerName: "groin_slot"
-  - type: ContainerContainer
-    containers:
-      groin_slot: !type:ContainerSlot {}
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTypeTrigger
-        damageType: Blunt
-        damage: 400
-      behaviors:
-      - !type:GibPartBehavior { }
-    - trigger:
-        !type:DamageTypeTrigger
-        damageType: Slash
-        damage: 400
-      behaviors:
-      - !type:GibPartBehavior { }
-    - trigger:
-        !type:DamageTypeTrigger
-        damageType: Heat
-        damage: 400
-      behaviors:
-      - !type:SpawnEntitiesBehavior
-        spawnInContainer: true
-        spawn:
-          Ash:
-            min: 1
-            max: 1
-      - !type:BurnBodyBehavior { }
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MeatLaserImpact
-  # Shitmed Change End
-
 
 - type: entity
   id: HeadHarpy

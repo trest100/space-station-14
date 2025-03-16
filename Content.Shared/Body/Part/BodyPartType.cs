@@ -7,16 +7,15 @@ namespace Content.Shared.Body.Part
     ///     Defines the type of a <see cref="BodyComponent"/>.
     /// </summary>
     [Serializable, NetSerializable]
-    public enum BodyPartType : byte
+    public enum BodyPartType
     {
         Other = 0,
-        Chest,
-        Groin,
+        Torso,
         Head,
         Arm,
         Hand,
         Leg,
         Foot,
-        Tail,
+        Tail
     }
 }

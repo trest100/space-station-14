@@ -21,10 +21,9 @@
     Snout: MobHumanoidAnyMarking
     Hair: MobHumanoidAnyMarking
     FacialHair: MobHumanoidAnyMarking
-    Chest: MobVoxChest
-    Groin: MobVoxGroin
     UndergarmentTop: MobHumanoidAnyMarking
     UndergarmentBottom: MobHumanoidAnyMarking
+    Chest: MobVoxTorso
     Eyes: MobVoxEyes
     LArm: MobVoxLArm
     RArm: MobVoxRArm
@@ -100,40 +99,22 @@
     state: head
 
 - type: humanoidBaseSprite
-  id: MobVoxChest
+  id: MobVoxTorso
   baseSprite:
     sprite: Mobs/Species/Vox/parts.rsi
-    state: chest
+    state: torso
 
 - type: humanoidBaseSprite
-  id: MobVoxChestMale
+  id: MobVoxTorsoMale
   baseSprite:
     sprite: Mobs/Species/Vox/parts.rsi
-    state: chest
+    state: torso
 
 - type: humanoidBaseSprite
-  id: MobVoxChestFemale
+  id: MobVoxTorsoFemale
   baseSprite:
     sprite: Mobs/Species/Vox/parts.rsi
-    state: chest
-
-- type: humanoidBaseSprite
-  id: MobVoxGroin
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: groin
-
-- type: humanoidBaseSprite
-  id: MobVoxGroinMale
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: groin
-
-- type: humanoidBaseSprite
-  id: MobVoxGroinFemale
-  baseSprite:
-    sprite: Mobs/Species/Vox/parts.rsi
-    state: groin
+    state: torso
 
 - type: humanoidBaseSprite
   id: MobVoxLLeg

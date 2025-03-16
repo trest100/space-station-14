@@ -1,6 +1,5 @@
 using Content.Server.Ghost;
 using Content.Shared.Administration.Logs;
-using Content.Shared.Backmen.Surgery.Consciousness.Components;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
 using Content.Shared.Database;
@@ -32,7 +31,6 @@ public sealed class SuicideSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<DamageableComponent, SuicideEvent>(OnDamageableSuicide);
-        SubscribeLocalEvent<ConsciousnessComponent, SuicideEvent>(OnConsciousnessSuicide);
         SubscribeLocalEvent<MobStateComponent, SuicideEvent>(OnEnvironmentalSuicide);
         SubscribeLocalEvent<MindContainerComponent, SuicideGhostEvent>(OnSuicideGhost);
     }
@@ -148,7 +146,7 @@ public sealed class SuicideSystem : EntitySystem
     /// </summary>
     private void OnDamageableSuicide(Entity<DamageableComponent> victim, ref SuicideEvent args)
     {
-        if (args.Handled || HasComp<ConsciousnessComponent>(victim))
+        if (args.Handled)
             return;
 
         var othersMessage = Loc.GetString("suicide-command-default-text-others", ("name", victim));
@@ -166,21 +164,6 @@ public sealed class SuicideSystem : EntitySystem
 
         args.DamageType ??= "Bloodloss";
         _suicide.ApplyLethalDamage(victim, args.DamageType);
-        args.Handled = true;
-    }
-
-    private void OnConsciousnessSuicide(Entity<ConsciousnessComponent> theOneToLeave, ref SuicideEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        var othersMessage = Loc.GetString("suicide-command-default-text-others", ("name", theOneToLeave));
-        _popup.PopupEntity(othersMessage, theOneToLeave, Filter.PvsExcept(theOneToLeave), true);
-
-        var selfMessage = Loc.GetString("suicide-command-default-text-self");
-        _popup.PopupEntity(selfMessage, theOneToLeave, theOneToLeave);
-
-        _suicide.KillConsciousness(theOneToLeave);
         args.Handled = true;
     }
 }

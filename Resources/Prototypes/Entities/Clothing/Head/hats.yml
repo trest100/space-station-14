@@ -787,8 +787,6 @@
   - type: Clothing
     sprite: Clothing/Head/Hats/melon.rsi
   - type: Armor
-    coverage:
-    - Head
     modifiers:
       coefficients:
         Blunt: 0.95
@@ -804,13 +802,9 @@
   - type: Clothing
     sprite: Clothing/Head/Hats/holyhatmelon.rsi
   - type: Armor
-    coverage:
-    - Head
-    dismembermentChanceDeduction: -1
     modifiers:
       coefficients:
-        Caustic: 0.9
-        Radiation: 0.9
+        Caustic: 0.95
 
 - type: entity
   parent: [ClothingHeadBase, BaseSyndicateContraband]
@@ -1108,7 +1102,7 @@
     canExtinguish: true
     damage:
       types:
-        Heat: 0.5
+        Heat: 1
   - type: Damageable
     damageModifierSet: Wood
   - type: Appearance

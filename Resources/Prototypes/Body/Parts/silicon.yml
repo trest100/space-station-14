@@ -3,21 +3,13 @@
   parent: BaseItem
   abstract: true
   components:
-  - type: WoundableVisuals
-    damageOverlayGroups:
-      Brute:
-        sprite: Mobs/Effects/brute_damage.rsi
-        color: "#DD8822"
-      Burn:
-        # TODO: stuff here
-        sprite: Mobs/Effects/burn_damage.rsi # Would have been cool if those were some fancy burns or stuff
-    bleedingOverlay: Mobs/Effects/bleeding_damage.rsi # they bleed oil, no? Change this if possible
   - type: Sprite
     sprite: Objects/Specific/Robotics/cyborg_parts.rsi
   - type: Icon
     sprite: Objects/Specific/Robotics/cyborg_parts.rsi
   - type: Damageable
     damageContainer: Inorganic
+  - type: BodyPart
   - type: ContainerContainer
     containers:
       bodypart: !type:Container
@@ -42,7 +34,7 @@
 
 - type: entity
   id: LeftArmBorg
-  parent: [BaseLeftArm, PartSilicon]
+  parent: PartSilicon
   name: cyborg left arm
   components:
   - type: BodyPart
@@ -60,7 +52,7 @@
 
 - type: entity
   id: RightArmBorg
-  parent: [BaseRightArm, PartSilicon]
+  parent: PartSilicon
   name: cyborg right arm
   components:
   - type: BodyPart
@@ -78,7 +70,7 @@
 
 - type: entity
   id: LeftLegBorg
-  parent: [BaseLeftLeg, PartSilicon]
+  parent: PartSilicon
   name: cyborg left leg
   components:
   - type: BodyPart
@@ -101,7 +93,7 @@
 
 - type: entity
   id: RightLegBorg
-  parent: [BaseRightLeg, PartSilicon]
+  parent: PartSilicon
   name: cyborg right leg
   components:
   - type: BodyPart
@@ -124,7 +116,7 @@
 
 - type: entity
   id: LightHeadBorg
-  parent: [BaseHead, PartSilicon]
+  parent: PartSilicon
   name: cyborg head
   components:
   - type: BodyPart
@@ -140,11 +132,11 @@
 
 - type: entity
   id: TorsoBorg
-  parent: [BaseChest, PartSilicon]
-  name: cyborg chest
+  parent: PartSilicon
+  name: cyborg torso
   components:
   - type: BodyPart
-    partType: Chest
+    partType: Torso
   - type: Sprite
     state: borg_chest
   - type: Icon

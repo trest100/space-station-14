@@ -885,7 +885,7 @@
   root: torso
   slots:
     torso:
-      part: ChestReptilian
+      part: TorsoReptilian
       connections:
       - hand 1
     hand 1:
@@ -897,7 +897,7 @@
   root: torso
   slots:
     torso:
-      part: ChestReptilian
+      part: TorsoReptilian
       connections:
       - hand 1
       - hand 2
@@ -912,7 +912,7 @@
   root: torso
   slots:
     torso:
-      part: ChestReptilian
+      part: TorsoReptilian
       connections:
       - hand 1
       - hand 2
@@ -930,7 +930,7 @@
   root: torso
   slots:
     torso:
-      part: ChestReptilian
+      part: TorsoReptilian
       connections:
       - hand 1
       - hand 2
@@ -951,7 +951,7 @@
   root: torso
   slots:
     torso:
-      part: ChestReptilian
+      part: TorsoReptilian
       connections:
       - hand 1
       - hand 2
@@ -972,7 +972,7 @@
 - type: entity
   id: XenoArm
   name: "кость ксено"
-  parent: [BaseLeftHand, PartSilicon]
+  parent: PartSilicon
   components:
   - type: BodyPart
     partType: Hand

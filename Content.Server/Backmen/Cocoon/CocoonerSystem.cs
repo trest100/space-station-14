@@ -8,7 +8,6 @@ using Content.Server.Speech.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Backmen.Arachne;
 using Content.Shared.Backmen.Cocoon;
-using Content.Shared.Backmen.Surgery.Traumas.Components;
 using Content.Shared.Backmen.Vampiric.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;

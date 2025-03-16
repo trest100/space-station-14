@@ -1,33 +1,29 @@
 - type: body
   id: Shadowkin
   name: "Shadowkin"
-  root: chest
+  root: torso
   slots:
     head:
       part: HeadShadowkin
       connections:
-      - chest
+      - torso
       organs:
         brain: OrganShadowkinBrain
         eyes: OrganShadowkinEyes
-    chest:
-      part: ChestShadowkin
+    torso:
+      part: TorsoShadowkin
       connections:
       - right arm
       - left arm
-      - groin
-      organs:
-        heart: OrganShadowkinHeart
-        lungs: OrganHumanLungs
-    groin:
-      part: GroinShadowkin
-      connections:
       - right leg
       - left leg
+      - head
       organs:
+        heart: OrganShadowkinHeart
         stomach: OrganShadowkinStomach
         liver:  OrganShadowkinLiver
         kidneys: OrganShadowkinKidneys
+        lungs: OrganHumanLungs
     right arm:
       part: RightArmShadowkin
       connections:

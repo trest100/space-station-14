@@ -258,8 +258,7 @@ namespace Content.Client.Options.UI.Tabs
 
             AddHeader("ui-options-header-targeting");
             AddButton(ContentKeyFunctions.TargetHead);
-            AddButton(ContentKeyFunctions.TargetChest);
-            AddButton(ContentKeyFunctions.TargetGroin);
+            AddButton(ContentKeyFunctions.TargetTorso);
             AddButton(ContentKeyFunctions.TargetLeftArm);
             AddButton(ContentKeyFunctions.TargetLeftHand);
             AddButton(ContentKeyFunctions.TargetRightArm);

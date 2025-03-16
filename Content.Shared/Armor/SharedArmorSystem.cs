@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
-using Content.Shared.Damage;
+﻿using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
 using Content.Shared.Silicons.Borgs;
@@ -16,7 +13,6 @@ namespace Content.Shared.Armor;
 public abstract class SharedArmorSystem : EntitySystem
 {
     [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
 
     /// <inheritdoc />
     public override void Initialize()
@@ -44,12 +40,7 @@ public abstract class SharedArmorSystem : EntitySystem
 
     private void OnDamageModify(EntityUid uid, ArmorComponent component, InventoryRelayedEvent<DamageModifyEvent> args)
     {
-        var (partType, _) = _body.ConvertTargetBodyPart(args.Args.TargetPart);
-
-        if (component.ArmorCoverage.Contains(partType))
-        {
-            args.Args.Damage = DamageSpecifier.ApplyModifierSet(args.Args.Damage, component.Modifiers);
-        }
+        args.Args.Damage = DamageSpecifier.ApplyModifierSet(args.Args.Damage, component.Modifiers);
     }
 
     private void OnBorgDamageModify(EntityUid uid, ArmorComponent component,
@@ -63,13 +54,7 @@ public abstract class SharedArmorSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess)
             return;
 
-        if (component is { ArmourCoverageHidden: true, ArmourModifiersHidden: true })
-            return;
-
-        if (!component.Modifiers.Coefficients.Any() && !component.Modifiers.FlatReduction.Any())
-            return;
-
-        var examineMarkup = GetArmorExamine(component);
+        var examineMarkup = GetArmorExamine(component.Modifiers);
 
         var ev = new ArmorExamineEvent(examineMarkup);
         RaiseLocalEvent(uid, ref ev);
@@ -79,48 +64,31 @@ public abstract class SharedArmorSystem : EntitySystem
             Loc.GetString("armor-examinable-verb-message"));
     }
 
-    private FormattedMessage GetArmorExamine(ArmorComponent component)
+    private FormattedMessage GetArmorExamine(DamageModifierSet armorModifiers)
     {
         var msg = new FormattedMessage();
         msg.AddMarkupOrThrow(Loc.GetString("armor-examine"));
 
-        var coverage = component.ArmorCoverage;
-        var armorModifiers = component.Modifiers;
-
-        if (!component.ArmourCoverageHidden)
+        foreach (var coefficientArmor in armorModifiers.Coefficients)
         {
-            foreach (var coveragePart in coverage.Where(coveragePart => coveragePart != BodyPartType.Other))
-            {
-                msg.PushNewline();
+            msg.PushNewline();
 
-                var bodyPartType = Loc.GetString("armor-coverage-type-" + coveragePart.ToString().ToLower());
-                msg.AddMarkupOrThrow(Loc.GetString("armor-coverage-value", ("type", bodyPartType)));
-            }
+            var armorType = Loc.GetString("armor-damage-type-" + coefficientArmor.Key.ToLower());
+            msg.AddMarkupOrThrow(Loc.GetString("armor-coefficient-value",
+                ("type", armorType),
+                ("value", MathF.Round((1f - coefficientArmor.Value) * 100, 1))
+            ));
         }
 
-        if (!component.ArmourModifiersHidden)
+        foreach (var flatArmor in armorModifiers.FlatReduction)
         {
-            foreach (var coefficientArmor in armorModifiers.Coefficients)
-            {
-                msg.PushNewline();
+            msg.PushNewline();
 
-                var armorType = Loc.GetString("armor-damage-type-" + coefficientArmor.Key.ToLower());
-                msg.AddMarkupOrThrow(Loc.GetString("armor-coefficient-value",
-                    ("type", armorType),
-                    ("value", MathF.Round((1f - coefficientArmor.Value) * 100, 1))
-                ));
-            }
-
-            foreach (var flatArmor in armorModifiers.FlatReduction)
-            {
-                msg.PushNewline();
-
-                var armorType = Loc.GetString("armor-damage-type-" + flatArmor.Key.ToLower());
-                msg.AddMarkupOrThrow(Loc.GetString("armor-reduction-value",
-                    ("type", armorType),
-                    ("value", flatArmor.Value)
-                ));
-            }
+            var armorType = Loc.GetString("armor-damage-type-" + flatArmor.Key.ToLower());
+            msg.AddMarkupOrThrow(Loc.GetString("armor-reduction-value",
+                ("type", armorType),
+                ("value", flatArmor.Value)
+            ));
         }
 
         return msg;

@@ -1,11 +1,15 @@
 using Content.Server.Body.Components;
+using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Medical.Components;
 using Content.Server.PowerCell;
 using Content.Server.Temperature.Components;
+using Content.Server.Traits.Assorted;
 using Content.Shared.Backmen.Targeting;
 using Content.Shared.Chemistry.EntitySystems;
+// backmen: surgery Start
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+// backmen: surgery End
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.IdentityManagement;
@@ -19,13 +23,9 @@ using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using System.Linq;
-using Content.Server.Traits.Assorted;
-using Content.Shared.Backmen.Surgery.Traumas.Components;
-using Content.Shared.Backmen.Surgery.Wounds;
-using Content.Shared.Backmen.Surgery.Wounds.Systems;
-using Content.Shared.Body.Components;
 using Content.Shared.Traits.Assorted;
 
 namespace Content.Server.Medical;
@@ -39,7 +39,6 @@ public sealed class HealthAnalyzerSystem : EntitySystem
     [Dependency] private readonly ItemToggleSystem _toggle = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private readonly SharedBodySystem _bodySystem = default!;
-    [Dependency] private readonly WoundSystem _woundSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly TransformSystem _transformSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
@@ -240,6 +239,8 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         if (!_uiSystem.HasUi(healthAnalyzer, HealthAnalyzerUiKey.Key))
             return;
 
+        if (!HasComp<DamageableComponent>(target))
+            return;
         var bodyTemperature = float.NaN;
 
         if (TryComp<TemperatureComponent>(target, out var temp))
@@ -261,9 +262,9 @@ public sealed class HealthAnalyzerSystem : EntitySystem
             unrevivable = true;
 
         // Start-backmen: surgery
-        Dictionary<TargetBodyPart, WoundableSeverity>? body = null;
-        if (HasComp<BodyComponent>(target))
-            body = _woundSystem.GetWoundableStatesOnBody(target);
+        Dictionary<TargetBodyPart, TargetIntegrity>? body = null;
+        if (HasComp<TargetingComponent>(target))
+            body = _bodySystem.GetBodyPartStatus(target);
         // End-backmen: surgery
 
         _uiSystem.ServerSendUiMessage(healthAnalyzer, HealthAnalyzerUiKey.Key, new HealthAnalyzerScannedUserMessage(
