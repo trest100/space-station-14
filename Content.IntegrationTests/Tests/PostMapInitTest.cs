@@ -103,6 +103,7 @@ namespace Content.IntegrationTests.Tests
             "ShwrAdventurer",
             "ShwrBig",
             "shwrDust",
+            "BackmenTortuga",
             "BackmenHive",
 			"BackmenShoukou",
 			"BackmenAspid",
@@ -122,7 +123,8 @@ namespace Content.IntegrationTests.Tests
             "Plasma",
             "Elkridge",
             "Convex",
-            "Relic"
+            "Relic",
+            "Lavatest", // Lavaland Change
         };
 
         /// <summary>
