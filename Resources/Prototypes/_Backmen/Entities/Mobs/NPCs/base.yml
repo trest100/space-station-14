@@ -129,7 +129,7 @@
   root: torso
   slots:
     torso:
-      part: ChestHuman
+      part: TorsoHuman
       connections:
       - right leg
       - left leg

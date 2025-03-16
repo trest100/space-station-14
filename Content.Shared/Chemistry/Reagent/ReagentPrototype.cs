@@ -190,7 +190,6 @@ namespace Content.Shared.Chemistry.Reagent
     }
 
     [Serializable, NetSerializable]
-
     public struct ReagentGuideEntry
     {
         public string ReagentPrototype;

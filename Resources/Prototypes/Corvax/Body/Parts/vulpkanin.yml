@@ -2,11 +2,29 @@
 # TODO BODY: Part damage
 - type: entity
   id: PartVulpkanin
-  parent: BasePart
+  parent: BaseItem
   name: "vulpkanin body part"
   abstract: true
   components:
+  - type: Damageable
+    damageContainer: OrganicPart # Shitmed Change
+  - type: BodyPart
+  - type: ContainerContainer
+    containers:
+      bodypart: !type:Container
+        ents: []
+  - type: StaticPrice #DynamicPrice
+    price: 100
+  - type: Tag
+    tags:
+      - Trash
   # Shitmed Change Start
+  - type: Gibbable
+  - type: SurgeryTool
+    startSound:
+      path: /Audio/_Shitmed/Medical/Surgery/organ1.ogg
+    endSound:
+      path: /Audio/_Shitmed/Medical/Surgery/organ2.ogg
   - type: Destructible
     thresholds:
     - trigger:
@@ -39,25 +57,25 @@
     # Shitmed Change End
 
 - type: entity
-  id: ChestVulpkanin
-  name: "vulpkanin chest"
+  id: TorsoVulpkanin
+  name: "vulpkanin torso"
   parent: PartVulpkanin
   components:
   - type: Sprite
     netsync: false
     sprite: Corvax/Mobs/Species/Vulpkanin/parts.rsi
-    state: "chest_m"
+    state: "torso_m"
   - type: Icon
     sprite: Corvax/Mobs/Species/Vulpkanin/parts.rsi
-    state: "chest_m"
+    state: "torso_m"
   # Shitmed Change Start
   - type: BodyPart
-    partType: Chest
-    toolName: "a chest"
-    containerName: "chest_slot"
+    partType: Torso
+    toolName: "a torso"
+    containerName: "torso_slot"
   - type: ContainerContainer
     containers:
-      chest_slot: !type:ContainerSlot {}
+      torso_slot: !type:ContainerSlot {}
   - type: Destructible
     thresholds:
     - trigger:
@@ -88,55 +106,6 @@
         sound:
           collection: MeatLaserImpact
   # Shitmed Change End
-
-- type: entity
-  id: GroinVulpkanin
-  name: "vulpkanin groin"
-  parent: PartVulpkanin
-  components:
-  - type: Sprite
-    netsync: false
-    sprite: Corvax/Mobs/Species/Vulpkanin/parts.rsi
-    state: "groin_m"
-  - type: Icon
-    sprite: Corvax/Mobs/Species/Vulpkanin/parts.rsi
-    state: "groin_m"
-  - type: BodyPart
-    partType: Groin
-    toolName: "a groin"
-    containerName: "groin_slot"
-  - type: ContainerContainer
-    containers:
-      groin_slot: !type:ContainerSlot {}
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTypeTrigger
-        damageType: Blunt
-        damage: 400
-      behaviors:
-      - !type:GibPartBehavior { }
-    - trigger:
-        !type:DamageTypeTrigger
-        damageType: Slash
-        damage: 400
-      behaviors:
-      - !type:GibPartBehavior { }
-    - trigger:
-        !type:DamageTypeTrigger
-        damageType: Heat
-        damage: 400
-      behaviors:
-      - !type:SpawnEntitiesBehavior
-        spawnInContainer: true
-        spawn:
-          Ash:
-            min: 1
-            max: 1
-      - !type:BurnBodyBehavior { }
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MeatLaserImpact
 
 - type: entity
   id: HeadVulpkanin

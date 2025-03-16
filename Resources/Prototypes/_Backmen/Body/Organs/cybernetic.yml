@@ -15,12 +15,6 @@
   description: A pair of cybernetic eyes that enhance your vision, and protect you from eye damage.
   components:
   - type: Organ
-    intCap: 17
-    integrity: 17
-    integrityThresholds:
-      Normal: 17
-      Damaged: 8
-      Destroyed: 0
     onAdd:
     - type: FlashImmunity
     - type: EyeProtection
@@ -32,12 +26,6 @@
   description: A pair of cybernetic eyes that enhance your vision, featuring an integrated SecHUD.
   components:
   - type: Organ
-    intCap: 17
-    integrity: 17
-    integrityThresholds:
-      Normal: 17
-      Damaged: 8
-      Destroyed: 0
     onAdd:
     - type: FlashImmunity
     - type: EyeProtection
@@ -52,12 +40,6 @@
   description: A pair of cybernetic eyes that enhance your vision, featuring an integrated MedHUD.
   components:
   - type: Organ
-    intCap: 17
-    integrity: 17
-    integrityThresholds:
-      Normal: 17
-      Damaged: 8
-      Destroyed: 0
     onAdd:
     - type: FlashImmunity
     - type: EyeProtection

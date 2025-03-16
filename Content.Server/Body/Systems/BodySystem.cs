@@ -39,7 +39,7 @@ public sealed class BodySystem : SharedBodySystem
     // start-backmen: surgery
     private void OnGibTorsoAttempt(Entity<BodyPartComponent> ent, ref AttemptEntityGibEvent args)
     {
-        if (ent.Comp.PartType == BodyPartType.Chest)
+        if (ent.Comp.PartType == BodyPartType.Torso)
         {
             args.GibType = GibType.Skip;
         }
@@ -123,9 +123,7 @@ public sealed class BodySystem : SharedBodySystem
         Angle splatCone = default,
         SoundSpecifier? gibSoundOverride = null,
         GibType gib = GibType.Gib,
-        GibContentsOption contents = GibContentsOption.Drop,
-        List<string>? allowedContainers = null,
-        List<string>? excludedContainers = null)
+        GibContentsOption contents = GibContentsOption.Drop)
     {
         if (!Resolve(bodyId, ref body, logMissing: false)
             || TerminatingOrDeleted(bodyId)
@@ -138,9 +136,9 @@ public sealed class BodySystem : SharedBodySystem
         if (xform.MapUid is null)
             return new HashSet<EntityUid>();
 
-        var gibs = base.GibBody(bodyId, gibOrgans, body, launchGibs: launchGibs, splatDirection: splatDirection,
-            splatModifier: splatModifier, splatCone: splatCone, gib: gib, contents: contents,
-            allowedContainers: allowedContainers, excludedContainers: excludedContainers);
+        var gibs = base.GibBody(bodyId, gibOrgans, body, launchGibs: launchGibs,
+            splatDirection: splatDirection, splatModifier: splatModifier, splatCone: splatCone,
+            gib: gib, contents: contents);
 
         var ev = new BeingGibbedEvent(gibs);
         RaiseLocalEvent(bodyId, ref ev);

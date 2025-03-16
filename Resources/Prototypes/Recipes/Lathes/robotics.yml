@@ -12,8 +12,8 @@
   parent: BaseRoboticsRecipe
   id: BaseBorgLimbRecipe
   materials:
-    Steel: 500
-    Glass: 300
+    Steel: 250
+    Glass: 100
 
 - type: latheRecipe
   abstract: true

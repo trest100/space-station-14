@@ -15,8 +15,8 @@
     price: 100
 
 - type: entity
-  id: ChestGolemCult
-  name: "golem chest"
+  id: TorsoGolemCult
+  name: "golem torso"
   parent: PartGolem
   components:
   - type: Sprite
@@ -26,21 +26,7 @@
     sprite: Backmen/Mobs/Species/Golem/cult.rsi
     state: "cultgolem_chest"
   - type: BodyPart
-    partType: Chest
-
-- type: entity
-  id: GroinGolemCult
-  name: "golem groin"
-  parent: PartGolem
-  components:
-  - type: Sprite
-    sprite: Backmen/Mobs/Species/Golem/cult.rsi
-    state: "cultgolem_groin"
-  - type: Icon
-    sprite: Backmen/Mobs/Species/Golem/cult.rsi
-    state: "cultgolem_groin"
-  - type: BodyPart
-    partType: Groin
+    partType: Torso
 
 - type: entity
   id: HeadGolemCult

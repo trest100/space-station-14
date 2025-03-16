@@ -374,8 +374,3 @@ reagent-effect-guidebook-plant-seeds-remove =
         [1] Убирает
        *[other] убирают
     } семена из растения
-reagent-effect-guidebook-suppress-pain =
-    { $chance ->
-        [1] подавляет
-       *[other] подавляют
-    } боль употребившего

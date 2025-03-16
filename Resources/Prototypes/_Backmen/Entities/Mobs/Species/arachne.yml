@@ -25,11 +25,7 @@
       - map: [ "enum.HumanoidVisualLayers.Chest" ]
         color: "#e8b59b"
         sprite: Mobs/Species/Human/parts.rsi
-        state: chest_m
-      - map: [ "enum.HumanoidVisualLayers.Groin" ]
-        color: "#e8b59b"
-        sprite: Mobs/Species/Human/parts.rsi
-        state: groin_m
+        state: torso_m
       - map: [ "enum.HumanoidVisualLayers.RLeg" ]
         sprite: Backmen/Mobs/Species/ArachneClassic/arachneClassic.rsi
         state: spider_body_front
@@ -137,13 +133,13 @@
     webRequired: true
   - type: Arachne
   - type: Cocooner
-  #- type: DamageVisuals
-  #  thresholds: [ 10, 20, 30, 50, 70, 100 ]
-  #  targetLayers:
-  #    - "enum.HumanoidVisualLayers.Chest"
-  #    - "enum.HumanoidVisualLayers.Head"
-  #    - "enum.HumanoidVisualLayers.LArm"
-  #    - "enum.HumanoidVisualLayers.RArm"
+  - type: DamageVisuals
+    thresholds: [ 10, 20, 30, 50, 70, 100 ]
+    targetLayers:
+      - "enum.HumanoidVisualLayers.Chest"
+      - "enum.HumanoidVisualLayers.Head"
+      - "enum.HumanoidVisualLayers.LArm"
+      - "enum.HumanoidVisualLayers.RArm"
   - type: MovedByPressure
     pressureResistance: 4
   - type: Barotrauma
@@ -198,11 +194,7 @@
     - map: [ "enum.HumanoidVisualLayers.Chest" ]
       color: "#e8b59b"
       sprite: Mobs/Species/Human/parts.rsi
-      state: chest_m
-    - map: [ "enum.HumanoidVisualLayers.Groin" ]
-      color: "#e8b59b"
-      sprite: Mobs/Species/Human/parts.rsi
-      state: groin_m
+      state: torso_m
     - map: [ "enum.HumanoidVisualLayers.RLeg" ]
       sprite: Backmen/Mobs/Species/ArachneClassic/arachneClassic.rsi
       state: spider_body_front
