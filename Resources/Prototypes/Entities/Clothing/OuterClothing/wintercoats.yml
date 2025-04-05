@@ -14,10 +14,16 @@
   - type: Item
     size: Normal
   - type: Armor
+    coverage:
+    - Chest
+    - Groin
+    - Arm
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.90
+        Stun: 0.80 #Backmen-edit
     priceMultiplier: 0
   - type: Food
     requiresSpecialDigestion: true
@@ -231,10 +237,18 @@
       outerClothing:
       - state: CHEM-equipped-OUTERCLOTHING
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.90
+        Stun: 0.80 #Backmen-edit
         Caustic: 0.75
     priceMultiplier: 0.15
   - type: ToggleableClothing
@@ -261,10 +275,18 @@
       outerClothing:
       - state: CMO-equipped-OUTERCLOTHING
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.90
+        Stun: 0.80 #Backmen-edit
         Caustic: 0.75
     priceMultiplier: 0.15
   - type: ToggleableClothing
@@ -324,10 +346,18 @@
       outerClothing:
       - state: GENE-equipped-OUTERCLOTHING
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.90
+        Stun: 0.80 #Backmen-edit
         Caustic: 0.9
     priceMultiplier: 0.15
   - type: ToggleableClothing
@@ -440,10 +470,18 @@
       outerClothing:
       - state: JANI-equipped-OUTERCLOTHING
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.9
+        Stun: 0.80 #Backmen-edit
         Caustic: 0.9
     priceMultiplier: 0.15
   - type: ToggleableClothing
@@ -470,10 +508,18 @@
       outerClothing:
       - state: MED-equipped-OUTERCLOTHING
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.90
+        Stun: 0.80 #Backmen-edit
         Caustic: 0.9
     priceMultiplier: 0.15
   - type: ToggleableClothing
@@ -546,10 +592,18 @@
       outerClothing:
       - state: PARA-equipped-OUTERCLOTHING
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.75
+        Stun: 0.80 #Backmen-edit
         Caustic: 0.9
     priceMultiplier: 0.15
   - type: ToggleableClothing
@@ -600,10 +654,18 @@
       outerClothing:
       - state: RD-equipped-OUTERCLOTHING
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.90
+        Stun: 0.80 #Backmen-edit
         Caustic: 0.9
     priceMultiplier: 0.15
   - type: ToggleableClothing
@@ -654,10 +716,18 @@
       outerClothing:
       - state: SCI-equipped-OUTERCLOTHING
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.90
+        Stun: 0.80 #Backmen-edit
         Caustic: 0.9
     priceMultiplier: 0.15
   - type: ToggleableClothing
@@ -707,10 +777,18 @@
       outerClothing:
       - state: VIRO-equipped-OUTERCLOTHING
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Slash: 0.95
         Heat: 0.90
+        Stun: 0.80 #Backmen-edit
         Caustic: 0.9
     priceMultiplier: 0.15
   - type: ToggleableClothing

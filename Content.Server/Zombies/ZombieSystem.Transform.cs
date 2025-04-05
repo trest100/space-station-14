@@ -18,7 +18,6 @@ using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Mobs;
@@ -132,6 +131,16 @@ public sealed partial class ZombieSystem
         melee.Range = 1.2f;
         melee.Angle = 0.0f;
         melee.HitSound = zombiecomp.BiteSound;
+
+        DirtyFields(target, melee, null, fields:
+        [
+            nameof(MeleeWeaponComponent.Animation),
+            nameof(MeleeWeaponComponent.WideAnimation),
+            nameof(MeleeWeaponComponent.AltDisarm),
+            nameof(MeleeWeaponComponent.Range),
+            nameof(MeleeWeaponComponent.Angle),
+            nameof(MeleeWeaponComponent.HitSound),
+        ]);
 
         if (mobState.CurrentState == MobState.Alive)
         {

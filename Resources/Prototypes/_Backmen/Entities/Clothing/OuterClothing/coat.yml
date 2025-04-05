@@ -163,11 +163,17 @@
   - type: Clothing
     sprite: Backmen/Clothing/OuterClothing/Coats/bluecoat.rsi
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Blunt: 0.7
         Slash: 0.7
-        Piercing: 0.7
+        Piercing: 0.5
         ArmorPiercing: 0.85
         Heat: 0.7
         Caustic: 0.75
@@ -195,6 +201,13 @@
   - type: Clothing
     sprite: Backmen/Clothing/OuterClothing/Coats/surgeon-lab-coat.rsi
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Tail
     modifiers:
       coefficients:
         Caustic: 0.75

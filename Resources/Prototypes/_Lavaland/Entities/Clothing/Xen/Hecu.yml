@@ -15,11 +15,20 @@
   - type: ExplosionResistance
     damageCoefficient: 0.5
   - type: Armor
+    coverage:
+    - Groin
+    - Chest
+    - Arm
+    - Hand
+    - Leg
+    - Foot
+    - Tail
     modifiers:
       coefficients:
         Blunt: 0.5
         Slash: 0.5
-        Piercing: 0.4
+        Piercing: 0.3
+        ArmorPiercing: 0.6
         Heat: 0.5
         Radiation: 0.1
         Caustic: 0.1
@@ -47,6 +56,8 @@
   - type: Clothing
     sprite: Backmen/test/base/rsi/Textures/Suits/blackmesa/hecuhelmet.rsi
   - type: Armor
+    coverage:
+    - Head
     modifiers:
       coefficients:
         Blunt: 0.7
@@ -115,6 +126,8 @@
   - type: Clothing
     sprite: Backmen/test/base/rsi/Textures/Mask/hecu.rsi
   - type: Armor
+    coverage:
+    - Head
     modifiers:
       coefficients:
         Blunt: 0.90
