@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using Content.Server._Lavaland.Procedural;
 using Content.Server.Atmos;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
@@ -16,6 +17,7 @@ using Content.Shared.Light.Components;
 using Content.Shared.Parallax.Biomes;
 using Content.Shared.Parallax.Biomes.Layers;
 using Content.Shared.Parallax.Biomes.Markers;
+using Content.Shared.Tag;
 using Microsoft.Extensions.ObjectPool;
 using Robust.Server.Player;
 using Robust.Shared;
@@ -50,6 +52,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ShuttleSystem _shuttles = default!;
+    [Dependency] private readonly TagSystem _tags = default!;
 
     private EntityQuery<BiomeComponent> _biomeQuery;
     private EntityQuery<FixturesComponent> _fixturesQuery;
@@ -59,6 +62,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
     private readonly HashSet<EntityUid> _handledEntities = new();
     private const float DefaultLoadRange = 16f;
     private float _loadRange = DefaultLoadRange;
+    private static readonly ProtoId<TagPrototype> AllowBiomeLoadingTag = "AllowBiomeLoading";
 
     private List<(Vector2i, Tile)> _tiles = new();
 
@@ -321,7 +325,7 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
 
     private bool CanLoad(EntityUid uid)
     {
-        return !_ghostQuery.HasComp(uid);
+        return !_ghostQuery.HasComp(uid) || _tags.HasTag(uid, AllowBiomeLoadingTag);
     }
 
     public override void Update(float frameTime)
@@ -449,6 +453,13 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
 
         foreach (var chunk in active)
         {
+            // Lavaland Change: Chunks optimization
+            var ev = new BeforeLoadChunkEvent(chunk);
+            RaiseLocalEvent(gridUid, ev);
+            if (ev.Cancelled)
+                continue;
+            // Lavaland Change: Chunks optimization
+
             LoadChunkMarkers(component, gridUid, grid, chunk, seed);
 
             if (!component.LoadedChunks.Add(chunk))
@@ -887,12 +898,13 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
 
         foreach (var chunk in component.LoadedChunks)
         {
-            // start-backmen: Shipwrecked
-            var ev = new Backmen.Shipwrecked.Biome.UnLoadChunkEvent(chunk);
+            // Lavaland Change: Chunks optimization
+            var ev = new UnLoadChunkEvent(chunk);
             RaiseLocalEvent(gridUid, ev);
             if(ev.Cancelled)
                 continue;
-            // end-backmen: Shipwrecked
+            // Lavaland Change: Chunks optimization
+
             if (active.Contains(chunk) || !component.LoadedChunks.Remove(chunk))
                 continue;
 
