@@ -314,3 +314,4 @@ Resources/MapImages
 # Direnv stuff
 .direnv/
 RobustToolbox
+/Scripts
