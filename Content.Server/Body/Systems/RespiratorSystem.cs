@@ -2,18 +2,20 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Components;
 using Content.Server.Chat.Systems;
-using Content.Server.EntityEffects.EffectConditions;
-using Content.Server.EntityEffects.Effects;
-using Content.Shared.Chemistry.EntitySystems;
+using Content.Server.EntityEffects;
 using Content.Shared.Alert;
 using Content.Shared.Atmos;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Events;
 using Content.Shared.Body.Prototypes;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.EntityEffects;
+using Content.Shared.EntityEffects.EffectConditions;
+using Content.Shared.EntityEffects.Effects;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Backmen.Mood;
 using Content.Shared.Backmen.Surgery.Body;
@@ -42,6 +44,7 @@ public sealed class RespiratorSystem : EntitySystem
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly ConsciousnessSystem _consciousness = default!; // backmen edit
+    [Dependency] private readonly EntityEffectSystem _entityEffect = default!;
 
     private static readonly ProtoId<MetabolismGroupPrototype> GasId = new("Gas");
 
@@ -302,7 +305,7 @@ public sealed class RespiratorSystem : EntitySystem
 
             foreach (var cond in effect.Conditions)
             {
-                if (cond is OrganType organ && !organ.Condition(lung, EntityManager))
+                if (cond is OrganType organ && !_entityEffect.OrganCondition(organ, lung))
                     return false;
             }
 
@@ -328,32 +331,6 @@ public sealed class RespiratorSystem : EntitySystem
             RaiseLocalEvent(ent, new MoodEffectEvent("Suffocating")); // backmen: mood
         }
 
-        // backmen edit start
-        if (_consciousness.TryGetNerveSystem(ent, out var nerveSys))
-        {
-            if (!_consciousness.TryGetConsciousnessModifier(ent, nerveSys.Value, out var modifier, "Suffocation"))
-            {
-                _consciousness.AddConsciousnessModifier(
-                    ent,
-                    nerveSys.Value,
-                    -ent.Comp.Damage.GetTotal(),
-                    identifier: "Suffocation",
-                    type: ConsciousnessModType.Pain);
-            }
-            else
-            {
-                _consciousness.SetConsciousnessModifier(
-                    ent,
-                    nerveSys.Value,
-                    modifier.Value.Change - ent.Comp.Damage.GetTotal(),
-                    identifier: "Suffocation",
-                    type: ConsciousnessModType.Pain);
-            }
-
-            return;
-        }
-        // backmen edit end
-
         _damageableSys.TryChangeDamage(ent, ent.Comp.Damage, interruptsDoAfters: false);
     }
 
@@ -367,17 +344,6 @@ public sealed class RespiratorSystem : EntitySystem
         foreach (var entity in organs)
         {
             _alertsSystem.ClearAlert(ent, entity.Comp1.Alert);
-        }
-
-        if (_consciousness.TryGetNerveSystem(ent, out var nerveSys))
-        {
-            _consciousness.ChangeConsciousnessModifier(
-                ent,
-                nerveSys.Value,
-                FixedPoint2.Abs(ent.Comp.DamageRecovery.GetTotal()),
-                "Suffocation");
-
-            return;
         }
 
         _damageableSys.TryChangeDamage(ent, ent.Comp.DamageRecovery);

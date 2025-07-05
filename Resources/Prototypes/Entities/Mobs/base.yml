@@ -97,7 +97,6 @@
   - type: MobState
     allowedStates:
     - Alive
-    - SoftCritical
     - Critical
     - Dead
   - type: MobThresholds
@@ -122,6 +121,8 @@
     - Shock
     - Cold
     - Caustic
+    - Asphyxiation
+    - Radiation
   - type: DamageOnHighSpeedImpact
     damage:
       types:
